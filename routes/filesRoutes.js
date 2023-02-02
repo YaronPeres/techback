@@ -1,17 +1,19 @@
 const express = require("express");
-const filesController = require("./../controllers/filesController");
+const fileController = require("./../controllers/fileController");
 
 const router = express.Router();
 
+router.param("id", fileController.checkID);
+
 router
   .route("/")
-  .get(filesController.getAllFiles)
-  .post(filesController.createFile);
+  .get(fileController.getAllFiles)
+  .post(fileController.checkBody, fileController.createFile);
 
 router
   .route("/:id")
-  .get(filesController.getFile)
-  .patch(filesController.updateFile)
-  .delete(filesController.deleteFile);
+  .get(fileController.getFile)
+  .patch(fileController.updateFile)
+  .delete(fileController.deleteFile);
 
 module.exports = router;

@@ -1,5 +1,28 @@
 const fs = require("fs");
 
+// middleware for id checking
+
+exports.checkID = (req, res, next, val) => {
+  console.log(`File id is: ${val}`);
+  if (req.params.id * 1 > files.length) {
+    return res.status(404).json({
+      status: "Fail",
+      Message: "Invalid id",
+    });
+  }
+  next();
+};
+// middleware for creating a new file making sure the user is inserting the info
+exports.checkBody = (req, res, next, val) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(404).json({
+      status: "Fail",
+      message: "missing name or price",
+    });
+  }
+  next();
+};
+
 exports.getAllFiles = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -13,12 +36,6 @@ exports.getAllFiles = (req, res) => {
 exports.getFile = (req, res) => {
   const id = req.params.id * 1;
   const file = files.find((el) => el.id === id);
-  if (!file) {
-    return res.status(404).json({
-      status: "fail",
-      Message: "invalid id",
-    });
-  }
 
   res.status(200).json({
     status: "success",
@@ -28,7 +45,7 @@ exports.getFile = (req, res) => {
   });
 };
 
-exports.reateFile = (req, res) => {
+exports.createFile = (req, res) => {
   const newId = files[files.length - 1].id + 1;
   const newFile = object.assign({ id: newId }, req.body);
 
@@ -43,13 +60,6 @@ exports.reateFile = (req, res) => {
   });
 };
 exports.updateFile = (req, res) => {
-  if (req.params.id * 1 > files.length) {
-    return res.status(404).json({
-      status: "Fail",
-      Message: "Invalid id",
-    });
-  }
-
   res.status(200).json({
     status: "success",
     data: {
@@ -59,13 +69,6 @@ exports.updateFile = (req, res) => {
 };
 
 exports.deleteFile = (req, res) => {
-  if (req.params.id * 1 > files.length) {
-    return res.status(404).json({
-      status: "Fail",
-      Message: "Invalid id",
-    });
-  }
-
   res.status(204).json({
     status: "success",
     data: null,

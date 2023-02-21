@@ -6,8 +6,15 @@ const filesRouter = require("./routes/filesRoutes");
 const userRouter = require("./routes/userRoutes");
 
 // 1) middlewares
-app.use(morgan("dev"));
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
 app.use(express.json());
+
+// static files
+// app.use(express.static(""));
 
 app.use((req, res, next) => {
   console.log("hello from middleware");
